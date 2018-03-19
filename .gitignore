@@ -1,0 +1,16 @@
+.idea
+client/.idea
+logs/*
+media/*
+collectstatic/*
+*.pyc
+wsgi.py
+!.gitkeep
+runserver
+makemigrations
+migrate
+createsuperuser
+.svn
+static/*
+node_server/node_modules
+node_server/package-lock.json
