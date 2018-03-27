@@ -1,8 +1,8 @@
-from apps.users.filters import UserFilter
-from apps.users.models import User
+from apps.users.filters import UserFilter, TestFilter
+from apps.users.models import User, Test
 from apps.users.serializers import (
     ForgotPasswordSerializer, SignUpSerializer,
-    ConfirmAccountSerializer, ResetPasswordSerializer, ChangePasswordSerializer, UserSerializer)
+    ConfirmAccountSerializer, ResetPasswordSerializer, ChangePasswordSerializer, UserSerializer, TestSerializer)
 from django.conf import settings
 from django.core import serializers
 from django.http import JsonResponse
@@ -223,16 +223,17 @@ class UsersViewSet(ModelViewSet):
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
     exclude_report_fields = ('password', 'last_login',)
 
-# class CooperationViewSet(ModelViewSet):
-#     queryset = (
-#         Cooperation.objects
-#             .all()
-#             .order_by('-updated_at')
-#     )
-#     serializer_class = CooperationSerializer
-#     http_method_names = ['get', ]
-#     permission_classes = [IsAuthenticated]
-#     filter_class = CooperationFilter
-#     search_fields = ('start_date',)
-#     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
-#
+
+class TestViewSet(ModelViewSet):
+    queryset = (
+        Test.objects
+            .all()
+            .order_by('-updated_at')
+    )
+    serializer_class = TestSerializer
+    http_method_names = ['get', 'delete', 'post', 'put', 'patch',]
+    permission_classes = [IsAuthenticated]
+    filter_class = TestFilter
+    search_fields = ('name',)
+    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
+

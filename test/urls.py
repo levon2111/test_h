@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from apps.core.urls import generate_url
-from apps.users.views import UsersViewSet
+from apps.users.views import UsersViewSet, TestViewSet
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
@@ -26,6 +26,7 @@ schema_view = get_swagger_view(title='TEST API')
 
 router = DefaultRouter()
 router.register(r'users', UsersViewSet, base_name='users')
+router.register(r'tests', TestViewSet, base_name='test')
 
 urlpatterns = [
 

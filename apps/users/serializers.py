@@ -1,12 +1,13 @@
 import base64
 import uuid
 
-from apps.core.serializer_fields import Base64ImageField
-from apps.core.utils import generate_unique_key, send_email_job_registration
-from apps.users.models import User
-from apps.users.validators import check_valid_password
 from django.core.files.base import ContentFile
 from rest_framework import serializers
+
+from apps.core.serializer_fields import Base64ImageField
+from apps.core.utils import generate_unique_key, send_email_job_registration
+from apps.users.models import User, Test
+from apps.users.validators import check_valid_password
 
 
 def base64_to_image(base64_string):
@@ -290,3 +291,16 @@ class ChangePasswordSerializer(serializers.Serializer):
         user = User.objects.get(pk=self.context['id'])
         if not user.check_password(data['old_password']):
             raise serializers.ValidationError({'password': ['Old password incorrect']})
+
+
+class TestSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+    name = serializers.CharField(
+        required=True,
+        max_length=255,
+        allow_blank=True,
+    )
+
+    class Meta:
+        model = Test
+        fields = '__all__'

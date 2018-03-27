@@ -1,9 +1,10 @@
 import uuid
 
-from apps.core.models import AbstractBaseModel
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+from apps.core.models import AbstractBaseModel
 
 
 def get_file_path(instance, filename):
@@ -129,23 +130,43 @@ class User(AbstractUser, AbstractBaseModel):
         verbose_name_plural = 'Users'
 
 
-class Learner(models.Model):
+class Learner(AbstractBaseModel):
     name = models.CharField(max_length=255, null=False)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name_plural='Learner'
+        verbose_name_plural = 'Learner'
 
 
-class Test(models.Model):
+class Test(AbstractBaseModel):
     name = models.CharField(max_length=255, null=False)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name_plural='Test'
+        verbose_name_plural = 'Test'
 
 
+class TestQuestion(AbstractBaseModel):
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
+    question = models.CharField(max_length=255, null=False)
+
+    def __str__(self):
+        return self.question
+
+    class Meta:
+        verbose_name_plural = 'TestQuestion'
+
+
+class TestQuestionAnswers(AbstractBaseModel):
+    question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
+    answer = models.CharField(max_length=255, null=False)
+
+    def __str__(self):
+        return self.question.question
+
+    class Meta:
+        verbose_name_plural = 'TestQuestionAnswer'

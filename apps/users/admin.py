@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Learner, Test
+from .models import User, Learner, Test, TestQuestion, TestQuestionAnswers
 
 
 class UserModelAdmin(admin.ModelAdmin):
@@ -51,3 +51,33 @@ class TestModelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Test, TestModelAdmin)
+
+
+class TestQuestionModelAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'test',
+        'question',
+    ]
+    search_fields = ['test', 'question']
+
+    class Meta:
+        model = TestQuestion
+
+
+admin.site.register(TestQuestion, TestQuestionModelAdmin)
+
+
+class TestQuestionAnswersModelAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'answer',
+        'question',
+    ]
+    search_fields = ['answer', 'question']
+
+    class Meta:
+        model = TestQuestionAnswers
+
+
+admin.site.register(TestQuestionAnswers, TestQuestionAnswersModelAdmin)
