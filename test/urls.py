@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from apps.core.urls import generate_url
-from apps.users.views import UsersViewSet, TestViewSet, TestQuestionViewSet
+from apps.users.views import UsersViewSet, TestViewSet, TestQuestionViewSet, TestQuestionAnswersViewSet
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
@@ -28,9 +28,9 @@ router = DefaultRouter()
 router.register(r'users', UsersViewSet, base_name='users')
 router.register(r'tests', TestViewSet, base_name='test')
 router.register(r'test-questions', TestQuestionViewSet, base_name='testquestion')
+router.register(r'test-questions-answer', TestQuestionAnswersViewSet, base_name='testquestionanswers')
 
 urlpatterns = [
-
     url(r'^$', schema_view),
     generate_url('auth-users/', include('apps.users.urls', namespace='auth-users')),
     url(r'^', include(router.urls)),

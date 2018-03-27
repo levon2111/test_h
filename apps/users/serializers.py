@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 from apps.core.serializer_fields import Base64ImageField
 from apps.core.utils import generate_unique_key, send_email_job_registration
-from apps.users.models import User, Test, TestQuestion
+from apps.users.models import User, Test, TestQuestion, TestQuestionAnswers
 from apps.users.validators import check_valid_password
 
 
@@ -320,4 +320,21 @@ class TestQuestionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TestQuestion
+        fields = '__all__'
+
+
+class TestQuestionAnswersSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+    question = serializers.HyperlinkedRelatedField(
+        queryset=Test.objects.all(),
+        view_name='testquestion-detail',
+    )
+    answer = serializers.CharField(
+        required=True,
+        max_length=255,
+        allow_blank=True,
+    )
+
+    class Meta:
+        model = TestQuestionAnswers
         fields = '__all__'

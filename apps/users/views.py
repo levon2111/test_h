@@ -1,9 +1,9 @@
-from apps.users.filters import UserFilter, TestFilter, TestQuestionFilter
-from apps.users.models import User, Test, TestQuestion
+from apps.users.filters import UserFilter, TestFilter, TestQuestionFilter, TestQuestionAnswersFilter
+from apps.users.models import User, Test, TestQuestion, TestQuestionAnswers
 from apps.users.serializers import (
     ForgotPasswordSerializer, SignUpSerializer,
     ConfirmAccountSerializer, ResetPasswordSerializer, ChangePasswordSerializer, UserSerializer, TestSerializer,
-    TestQuestionSerializer)
+    TestQuestionSerializer, TestQuestionAnswersSerializer)
 from django.conf import settings
 from django.core import serializers
 from django.http import JsonResponse
@@ -249,6 +249,18 @@ class TestQuestionViewSet(ModelViewSet):
     http_method_names = ['get', 'delete', 'post', 'put', 'patch',]
     permission_classes = [IsAuthenticated]
     filter_class = TestQuestionFilter
-    search_fields = ('name',)
+    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
+
+
+class TestQuestionAnswersViewSet(ModelViewSet):
+    queryset = (
+        TestQuestionAnswers.objects
+            .all()
+            .order_by('-updated_at')
+    )
+    serializer_class = TestQuestionAnswersSerializer
+    http_method_names = ['get', 'delete', 'post', 'put', 'patch',]
+    permission_classes = [IsAuthenticated]
+    filter_class = TestQuestionAnswersFilter
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
 

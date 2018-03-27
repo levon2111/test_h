@@ -164,6 +164,8 @@ class TestQuestion(AbstractBaseModel):
 class TestQuestionAnswers(AbstractBaseModel):
     question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
     answer = models.CharField(max_length=255, null=False)
+    correct = models.BooleanField(default=False)
+    rate = models.IntegerField()
 
     def __str__(self):
         return self.question.question
