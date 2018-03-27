@@ -1,8 +1,8 @@
 import rest_framework_filters as filters
-from apps.core.filters import BaseFilter
 
+from apps.core.filters import BaseFilter
 from .models import (
-    User, Test)
+    User, Test, TestQuestion)
 
 
 class UserFilter(filters.FilterSet, BaseFilter):
@@ -23,4 +23,14 @@ class TestFilter(filters.FilterSet, BaseFilter):
         model = Test
         fields = {
             'name': ['icontains', ],
+        }
+
+
+class TestQuestionFilter(filters.FilterSet, BaseFilter):
+    created = filters.DateFilter(name='created', method='filter_created')
+
+    class Meta:
+        model = TestQuestion
+        fields = {
+            'test__name': ['icontains', ],
         }
