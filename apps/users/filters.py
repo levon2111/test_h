@@ -2,7 +2,7 @@ import rest_framework_filters as filters
 
 from apps.core.filters import BaseFilter
 from .models import (
-    User, Test, TestQuestion, TestQuestionAnswers)
+    User, Test, TestQuestion, TestQuestionAnswers, TestResults)
 
 
 class UserFilter(filters.FilterSet, BaseFilter):
@@ -46,4 +46,17 @@ class TestQuestionAnswersFilter(filters.FilterSet, BaseFilter):
             'question__question': ['icontains', ],
             'question__test__name': ['icontains', ],
             'question__test__id': ['exact', ],
+        }
+
+
+class TestResultsFilter(filters.FilterSet, BaseFilter):
+    created = filters.DateFilter(name='created', method='filter_created')
+
+    class Meta:
+        model = TestResults
+        fields = {
+            'learner__name': ['icontains', ],
+            'learner__id': ['exact', ],
+            'test__id': ['exact', ],
+            'test__name': ['icontains', ],
         }

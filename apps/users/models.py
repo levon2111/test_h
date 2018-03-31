@@ -168,7 +168,20 @@ class TestQuestionAnswers(AbstractBaseModel):
     rate = models.IntegerField()
 
     def __str__(self):
-        return self.question.question
+        return self.answer
 
     class Meta:
         verbose_name_plural = 'TestQuestionAnswer'
+
+
+class TestResults(AbstractBaseModel):
+    learner = models.ForeignKey(Learner, on_delete=models.CASCADE)
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
+    question = models.ForeignKey(TestQuestion, on_delete=models.CASCADE)
+    answer = models.ForeignKey(TestQuestionAnswers, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.learner.name
+
+    class Meta:
+        verbose_name_plural = 'TestResults'

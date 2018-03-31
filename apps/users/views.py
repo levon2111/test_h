@@ -1,20 +1,22 @@
-from apps.users.filters import UserFilter, TestFilter, TestQuestionFilter, TestQuestionAnswersFilter
-from apps.users.models import User, Test, TestQuestion, TestQuestionAnswers
-from apps.users.serializers import (
-    ForgotPasswordSerializer, SignUpSerializer,
-    ConfirmAccountSerializer, ResetPasswordSerializer, ChangePasswordSerializer, UserSerializer, TestSerializer,
-    TestQuestionSerializer, TestQuestionAnswersSerializer)
 from django.conf import settings
 from django.core import serializers
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+
+from apps.users.filters import UserFilter, TestFilter, TestQuestionFilter, TestQuestionAnswersFilter, TestResultsFilter
+from apps.users.models import User, Test, TestQuestion, TestQuestionAnswers, TestResults
+from apps.users.serializers import (
+    ForgotPasswordSerializer, SignUpSerializer,
+    ConfirmAccountSerializer, ResetPasswordSerializer, ChangePasswordSerializer, UserSerializer, TestSerializer,
+    TestQuestionSerializer, TestQuestionAnswersSerializer, TestResultsSerializer)
 
 
 class Login(ObtainAuthToken):
@@ -218,7 +220,7 @@ class UsersViewSet(ModelViewSet):
     queryset = User.objects.all().order_by('-updated_at')
     serializer_class = UserSerializer
     http_method_names = ['get', 'delete', 'post', 'put', 'patch', ]
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     filter_class = UserFilter
     search_fields = ('first_name', 'last_name', 'email', 'id',)
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
@@ -232,8 +234,8 @@ class TestViewSet(ModelViewSet):
             .order_by('-updated_at')
     )
     serializer_class = TestSerializer
-    http_method_names = ['get', 'delete', 'post', 'put', 'patch',]
-    permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'delete', 'post', 'put', 'patch', ]
+    permission_classes = []
     filter_class = TestFilter
     search_fields = ('name',)
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
@@ -246,8 +248,8 @@ class TestQuestionViewSet(ModelViewSet):
             .order_by('-updated_at')
     )
     serializer_class = TestQuestionSerializer
-    http_method_names = ['get', 'delete', 'post', 'put', 'patch',]
-    permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'delete', 'post', 'put', 'patch', ]
+    permission_classes = []
     filter_class = TestQuestionFilter
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
 
@@ -259,8 +261,53 @@ class TestQuestionAnswersViewSet(ModelViewSet):
             .order_by('-updated_at')
     )
     serializer_class = TestQuestionAnswersSerializer
-    http_method_names = ['get', 'delete', 'post', 'put', 'patch',]
-    permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'delete', 'post', 'put', 'patch', ]
+    permission_classes = []
     filter_class = TestQuestionAnswersFilter
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
 
+
+class TestResultsViewSet(ModelViewSet):
+    queryset = (
+        TestResults.objects
+            .all()
+            .order_by('-updated_at')
+    )
+    serializer_class = TestResultsSerializer
+    http_method_names = ['get', 'delete', 'post', 'put', 'patch', ]
+    permission_classes = []
+    filter_class = TestResultsFilter
+    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES)
+
+
+class GetTestAPIView(APIView):
+    permission_classes = []
+
+    def get(self, context, test_id):
+        test = get_object_or_404(Test, pk=test_id)
+        questions = []
+        test_questions = TestQuestion.objects.filter(test=test)
+        for x in test_questions:
+            answers = []
+            questions_answers = TestQuestionAnswers.objects.filter(question=x)
+            for y in questions_answers:
+                answers.append({
+                    'id': y.pk,
+                    'answer': y.answer,
+                    'correct': y.correct,
+                    'rate': y.rate,
+                })
+            questions.append({'id': x.pk, 'question': x.question, 'answers': answers})
+        return JsonResponse(
+            {
+                'status_code': 200,
+                'results': {
+                    'test': {
+                        'id': test.pk,
+                        'name': test.name
+                    },
+                    'questions': questions
+                }
+            },
+            status=status.HTTP_200_OK,
+        )

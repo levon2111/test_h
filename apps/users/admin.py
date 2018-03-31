@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Learner, Test, TestQuestion, TestQuestionAnswers
+from .models import User, Learner, Test, TestQuestion, TestQuestionAnswers, TestResults
 
 
 class UserModelAdmin(admin.ModelAdmin):
@@ -73,6 +73,7 @@ class TestQuestionAnswersModelAdmin(admin.ModelAdmin):
         'id',
         'answer',
         'question',
+        'correct',
     ]
     search_fields = ['answer', 'question']
 
@@ -81,3 +82,30 @@ class TestQuestionAnswersModelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TestQuestionAnswers, TestQuestionAnswersModelAdmin)
+
+
+class TestResultsModelAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'learner',
+        'test',
+        'question',
+        'answer',
+        'correct_answer',
+        'answer_rate',
+    ]
+    search_fields = ['learner', 'test']
+    list_filter = ['test', 'learner']
+    ordering = ['test', 'learner', ]
+
+    def correct_answer(self, obj):
+        return obj.answer.correct
+
+    def answer_rate(self, obj):
+        return obj.answer.rate
+
+    class Meta:
+        model = TestResults
+
+
+admin.site.register(TestResults, TestResultsModelAdmin)

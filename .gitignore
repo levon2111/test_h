@@ -13,3 +13,4 @@ createsuperuser
 static/*
 node_server/node_modules
 node_server/package-lock.json
+test/staticfiles/*
