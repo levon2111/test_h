@@ -232,3 +232,8 @@ EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_HOST_USER = 'postmaster@dined.codebnb.me'
 EMAIL_HOST_PASSWORD = 'e9fe03746b87bc87a03017cdc95a30ad'
 EMAIL_PORT = 2525
+
+import django_heroku
+django_heroku.settings(locals())
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
