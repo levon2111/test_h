@@ -14,6 +14,8 @@ import os
 import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -237,3 +239,10 @@ import django_heroku
 django_heroku.settings(locals())
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default="postgres://zsiiagjgegwapv:fbcc173752b6366174ec1e413da13f3926dbd829f76ca607acb9b05e0877bc01@ec2-23-21-121-220.compute-1.amazonaws.com:5432/defp2enqgm72k8"
+    )
+}
+
