@@ -89,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'test.wsgi.application'
+WSGI_APPLICATION = 'demo-ticher.wsgi.application'
 
 DATABASES = {
     'default': {
