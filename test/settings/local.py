@@ -5,7 +5,7 @@ DEBUG = True
 THUMBNAIL_DEBUG = True
 
 # BASE_URL = 'http://127.0.0.1:8000'
-BASE_URL = 'http://test-api.codebnb.me'
+BASE_URL = 'https://demo-ticher.herokuapp.com/'
 # CLIENT_BASE_URL = 'http://localhost:4200'
 CLIENT_BASE_URL = 'http://test.codebnb.me'
 ALLOWED_HOSTS = ['*', ]

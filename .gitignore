@@ -4,7 +4,6 @@ logs/*
 media/*
 collectstatic/*
 *.pyc
-wsgi.py
 !.gitkeep
 runserver
 makemigrations
