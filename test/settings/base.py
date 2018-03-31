@@ -89,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'demo-ticher.wsgi.application'
+WSGI_APPLICATION = 'test.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -235,9 +235,6 @@ EMAIL_HOST_USER = 'postmaster@dined.codebnb.me'
 EMAIL_HOST_PASSWORD = 'e9fe03746b87bc87a03017cdc95a30ad'
 EMAIL_PORT = 2525
 
-import django_heroku
-django_heroku.settings(locals())
-
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 DATABASES = {
@@ -246,3 +243,6 @@ DATABASES = {
     )
 }
 
+
+import django_heroku
+django_heroku.settings(locals())

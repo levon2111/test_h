@@ -39,3 +39,8 @@ DATABASES = {
 # }
 
 SENDER_EMAIL = 'info@test.codebnb.me'
+
+
+import django_heroku
+django_heroku.settings(locals())
+

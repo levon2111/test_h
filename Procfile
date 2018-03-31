@@ -1,1 +1,1 @@
-web: gunicorn demo-ticher.wsgi --log-file -
+web: gunicorn test.wsgi --log-file -
