@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.users.filters import UserFilter, TestFilter, TestQuestionFilter, TestQuestionAnswersFilter, TestResultsFilter
-from apps.users.models import User, Test, TestQuestion, TestQuestionAnswers, TestResults
+from apps.users.models import User, Test, TestQuestion, TestQuestionAnswers, TestResults, Learner
 from apps.users.serializers import (
     ForgotPasswordSerializer, SignUpSerializer,
     ConfirmAccountSerializer, ResetPasswordSerializer, ChangePasswordSerializer, UserSerializer, TestSerializer,
@@ -311,3 +311,21 @@ class GetTestAPIView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+
+class TestAPIView(APIView):
+    def post(self, request):
+        data = request.data
+        learner = Learner(name=data['learner'])
+        learner.save()
+        for x in data['result']:
+            test_result = TestResults(
+                test=Test.objects.get(pk=x['test_id']),
+                learner=learner,
+                question=TestQuestion.objects.get(pk=x['question_id']),
+                answer=TestQuestionAnswers.objects.get(pk=x['answer_id'])
+            )
+            test_result.save()
+
+        return Response('success', status=status.HTTP_201_CREATED)
+
