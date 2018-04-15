@@ -197,3 +197,15 @@ class TestAnalysisResults(AbstractBaseModel):
 
     class Meta:
         verbose_name_plural = 'TestAnalysisResults'
+
+
+class TestAnalysisTypeYesNo(AbstractBaseModel):
+    rate_start = models.IntegerField()
+    rate_end = models.IntegerField()
+    analysis = models.TextField(null=False)
+
+    def __str__(self):
+        return self.analysis
+
+    class Meta:
+        verbose_name_plural = 'TestAnalysisTypeYesNo'
