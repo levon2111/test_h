@@ -126,10 +126,23 @@ class TestResultsModelAdmin(admin.ModelAdmin):
         'answer',
         'correct_answer',
         'answer_rate',
+        'analysis',
     ]
     search_fields = ['learner', 'test']
-    list_filter = ['test', 'learner']
+    list_filter = ['test', 'learner__name']
     ordering = ['test', 'learner', ]
+
+
+    def analysis(self, obj):
+        rating = TestResults.objects.filter(learner=obj.learner, test=obj.test)
+        sumR = 0
+        for x in rating:
+            sumR = sumR + x.answer.rate
+        an = TestAnalysisResults.objects.filter(rate_end__gte=sumR, rate_start__lte=sumR)
+        if an is not None:
+            return an.first().analysis
+        return ''
+
 
     def correct_answer(self, obj):
         return obj.answer.correct
