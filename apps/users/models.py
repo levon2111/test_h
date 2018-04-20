@@ -150,7 +150,18 @@ class Test(AbstractBaseModel):
         verbose_name_plural = 'Test'
 
 
+class TestSandxak(AbstractBaseModel):
+    name = models.CharField(max_length=255, null=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Test Sandxak'
+
+
 class TestQuestion(AbstractBaseModel):
+    sandxak = models.ForeignKey(TestSandxak, on_delete=models.CASCADE, null=True, blank=True)
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     question = models.CharField(max_length=255, null=False)
 
@@ -158,7 +169,7 @@ class TestQuestion(AbstractBaseModel):
         return self.question
 
     class Meta:
-        verbose_name_plural = 'TestQuestion'
+        verbose_name_plural = 'Test Question'
 
 
 class TestQuestionAnswers(AbstractBaseModel):
@@ -171,7 +182,7 @@ class TestQuestionAnswers(AbstractBaseModel):
         return self.answer
 
     class Meta:
-        verbose_name_plural = 'TestQuestionAnswer'
+        verbose_name_plural = 'Test Question Answer'
 
 
 class TestResults(AbstractBaseModel):
@@ -184,28 +195,43 @@ class TestResults(AbstractBaseModel):
         return self.learner.name
 
     class Meta:
-        verbose_name_plural = 'TestResults'
+        verbose_name_plural = 'Test Results'
+
+#
+# class TestAnalysisResults(AbstractBaseModel):
+#     rate_start = models.IntegerField()
+#     rate_end = models.IntegerField()
+#     analysis = models.TextField(null=False)
+#
+#     def __str__(self):
+#         return self.analysis
+#
+#     class Meta:
+#         verbose_name_plural = 'TestAnalysisResults'
+#
+#
+# class TestAnalysisTypeYesNo(AbstractBaseModel):
+#     rate_start = models.IntegerField()
+#     rate_end = models.IntegerField()
+#     analysis = models.TextField(null=False)
+#
+#     def __str__(self):
+#         return self.analysis
+#
+#     class Meta:
+#         verbose_name_plural = 'TestAnalysisTypeYesNo'
 
 
-class TestAnalysisResults(AbstractBaseModel):
-    rate_start = models.IntegerField()
-    rate_end = models.IntegerField()
+class TestAnalysis(AbstractBaseModel):
+    yes_no_rate_end = models.IntegerField()
+    yes_no_rate_start = models.IntegerField()
+    type_two_rate_end = models.IntegerField()
+    type_two_rate_start = models.IntegerField()
+
     analysis = models.TextField(null=False)
 
     def __str__(self):
         return self.analysis
 
     class Meta:
-        verbose_name_plural = 'TestAnalysisResults'
-
-
-class TestAnalysisTypeYesNo(AbstractBaseModel):
-    rate_start = models.IntegerField()
-    rate_end = models.IntegerField()
-    analysis = models.TextField(null=False)
-
-    def __str__(self):
-        return self.analysis
-
-    class Meta:
-        verbose_name_plural = 'TestAnalysisTypeYesNo'
+        verbose_name_plural = 'Test Analysis'
